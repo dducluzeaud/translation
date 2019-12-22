@@ -12,5 +12,8 @@
     "start": "mono-run start --stream 500 --ui row",
     "lint": "mono-run lint",
     "test": "mono-run test"
+  },
+  "devDependencies": {
+    "monorepo-run": "^0.4.2"
   }
 }
