@@ -1,0 +1,16 @@
+{
+  "name": "translatation",
+  "version": "1.0.0",
+  "author": "dducluzeaud <david.ducluzeaud@live.fr>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "start": "mono-run start --stream 500 --ui row",
+    "lint": "mono-run lint",
+    "test": "mono-run test"
+  }
+}
