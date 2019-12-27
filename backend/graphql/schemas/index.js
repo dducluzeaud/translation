@@ -1,6 +1,10 @@
 import { gql } from 'apollo-server'
 
 const typedefs = gql`
+  type Message {
+    message: String
+  }
+
   type User {
     _id: ID!
     email: String!
@@ -32,6 +36,7 @@ const typedefs = gql`
 
   type Mutation {
     createUser(userInput: UserInput): User
+    uploadTranslations(value: Upload!): Message
   }
 `
 
