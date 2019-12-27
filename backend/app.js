@@ -10,23 +10,6 @@ dotenv.config()
 const server = new ApolloServer({
   typeDefs: graphQlSchema,
   resolvers: graphQlResolvers,
-  context: async ({ req }) => {
-    // get the user token from the headers
-    // remove Bearer from token
-    const token = req.headers.authorization || null
-
-    if (token) {
-      const tokenEnd = token.split(' ')[1]
-      const verified = jwt.verify(tokenEnd, process.env.SECRET_KEY_JWT)
-
-      // try to retrieve a user with the token
-      const user = jwt.decode(token)
-      return { user }
-    }
-
-    return null
-    // add the user to the context
-  },
   introspection: true,
   playground: true,
 })
