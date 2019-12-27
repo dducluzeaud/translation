@@ -13,10 +13,12 @@ const server = new ApolloServer({
   context: async ({ req }) => {
     // get the user token from the headers
     // remove Bearer from token
-    const token = req.headers.authorization.split(' ')[1] || null
+    const token = req.headers.authorization || null
 
     if (token) {
-      const ver = jwt.verify(token, process.env.SECRET_KEY_JWT)
+      const tokenEnd = token.split(' ')[1]
+      const verified = jwt.verify(tokenEnd, process.env.SECRET_KEY_JWT)
+
       // try to retrieve a user with the token
       const user = jwt.decode(token)
       return { user }
