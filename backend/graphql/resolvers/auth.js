@@ -44,7 +44,7 @@ const resolvers = {
           email: user.email,
         },
         process.env.SECRET_KEY_JWT,
-        { expiresIn: '12h' },
+        { expiresIn: '12h' }
       )
       return { userId: user.id, token: token, tokenExpiration: 1 }
     },

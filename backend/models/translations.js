@@ -3,11 +3,11 @@ import mongoose from 'mongoose'
 const translationSchema = new mongoose.Schema({
   traduction_key: {
     type: String,
-    required: true
+    required: true,
   },
   created_at: {
     type: Date,
-    default: new Date()
+    default: new Date(),
   },
   url: {
     type: String,
@@ -18,7 +18,7 @@ const translationSchema = new mongoose.Schema({
     },
     fr: {
       type: String,
-    }
+    },
   },
   updated: {
     type: Boolean,
@@ -26,8 +26,8 @@ const translationSchema = new mongoose.Schema({
   },
   project: {
     type: mongoose.Schema.Types.ObjectID,
-    ref: "Project"
-  }
+    ref: 'Project',
+  },
 })
 
 export default mongoose.model('Translation', translationSchema)

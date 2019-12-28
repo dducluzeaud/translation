@@ -27,8 +27,8 @@
 
 <script>
 export default {
-  name: "TheNavbar"
-};
+  name: 'TheNavbar',
+}
 </script>
 
 <style scoped>

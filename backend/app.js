@@ -16,9 +16,9 @@ const server = new ApolloServer({
 
 const connectAndLaunch = async () => {
   try {
-    mongoose.set('useUnifiedTopology', true);
+    mongoose.set('useUnifiedTopology', true)
     await mongoose.connect(
-      `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0-mlmqu.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`,
+      `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0-mlmqu.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`
     )
     const port = 5000
     await server.listen(port)

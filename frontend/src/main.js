@@ -6,7 +6,7 @@ import Vuetify from "vuetify/lib";
 import App from "./App.vue";
 import vuetify from "./plugins/vuetify";
 import router from "./router";
-import { createProvider } from './vue-apollo'
+import { createProvider } from "./vue-apollo";
 
 Vue.use(VueRouter);
 Vue.use(Vuelidate);

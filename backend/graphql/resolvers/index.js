@@ -3,7 +3,7 @@ import fileResolver from './file'
 
 const rootResolver = {
   ...authResolver,
-  ...fileResolver
+  ...fileResolver,
 }
 
 export default rootResolver
