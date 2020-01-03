@@ -1,8 +1,33 @@
 import Translation from '../../models/translations'
 import Project from '../../models/project'
+import { createWriteStream, existsSync, mkdirSync } from 'fs'
+import path from 'path'
 
+existsSync(path.join(__dirname, '../../uploads')) ||
+  mkdirSync(path.join(__dirname, '../../uploads'))
+
+const files = []
 const resolvers = {
+  Query: {
+    getTranslation: async (_, { project }) => {
+      const projectId = await Project.find({ name: project })
+      return Translation.find({ project: projectId })
+    },
+  },
   Mutation: {
+    uploadFile: async (_, { file }) => {
+      const { createReadStream, filename, mimetype, encoding } = await file
+
+      await new Promise(res =>
+        createReadStream()
+          .pipe(
+            createWriteStream(path.join(__dirname, '../../uploads', filename))
+          )
+          .on('close', res)
+      )
+
+      return { filename, mimetype, encoding }
+    },
     uploadTranslations: async (_, args) => {
       const translations = await args.value
 

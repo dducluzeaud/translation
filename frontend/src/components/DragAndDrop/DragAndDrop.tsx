@@ -1,65 +1,37 @@
-import React, { useState } from "react";
-import Dropzone from "react-dropzone";
-import { Box, Paragraph } from "grommet";
-import { Language } from "grommet-icons";
-import styled, { keyframes } from "styled-components/macro";
-import { isValidFile } from "../../utils/utils";
+import React, { useState, ChangeEvent } from 'react'
+import Dropzone from 'react-dropzone'
+import { Box, Paragraph } from 'grommet'
+import { Language } from 'grommet-icons'
+import styled, { keyframes } from 'styled-components/macro'
+import { isValidFile } from '../../utils/utils'
 
 interface Props {
-  uploadFile: () => void;
+  uploadFile: (mutation: object) => void
 }
 
 const DragAndDrop: React.FC<Props> = ({ uploadFile }) => {
-  const [error, setError] = useState<string | null>(null);
-  const [dataToUpload, setDataToUpload] = useState({});
-
-  const [filesLoaded, setFilesLoaded] = useState(0);
-
-  console.log(dataToUpload, "YOLO_ONE");
+  const [error, setError] = useState<string | null>(null)
+  const [filesLoaded, setFilesLoaded] = useState(0)
 
   const handleFile = (acceptedFiles: File[]) => {
-    if (error) setError(null);
+    if (error) setError(null)
     if (acceptedFiles.length > 2) {
-      return setError("Currently support no more than 2 files");
+      return setError('Currently support no more than 2 files')
     }
 
-    const fileNames = acceptedFiles.map(file => file.name);
+    const fileNames = acceptedFiles.map(file => file.name)
     if (!isValidFile(fileNames)) {
-      return setError('Your files should be "en.json" and/or "fr.json"');
+      return setError('Your files should be "en.json" and/or "fr.json"')
     }
 
-    setFilesLoaded(acceptedFiles.length);
+    setFilesLoaded(acceptedFiles.length)
 
     acceptedFiles.forEach(file => {
-      const reader = new FileReader();
-
-      const language = file.name.split(".")[0];
-      reader.onloadend = () => {
-        console.log(dataToUpload);
-        setDataToUpload(() => ({
-          ...dataToUpload,
-          [language]: reader.result
-        }));
-      };
-      // reader.onload = (e: Event) => {
-      //   console.log(language);
-      //   console.log(dataToUpload);
-      //   console.log(reader.result);
-      // };
-      reader.readAsText(file);
-    });
-    // const reader = new FileReader();
-    // reader.readAsText(acceptedFiles[0]);
-    // reader.onload = (e: Event) => {
-    //   const language = acceptedFiles[0].name.split(".")[0];
-    //   setDataToUploadOne(() => ({ [language]: reader.result }));
-    //   if (acceptedFiles.length > 1 && reader.readyState === reader.EMPTY) {
-    //     reader.readAsText(acceptedFiles[1]);
-    //     const language = acceptedFiles[0].name.split(".")[0];
-    //     setDataToUploadTwo(() => ({ [language]: reader.result }));
-    //   }
-    // };
-  };
+      console.log(file)
+      uploadFile({ variables: { file } })
+    })
+    setFilesLoaded(0)
+  }
 
   return (
     <>
@@ -84,7 +56,7 @@ const DragAndDrop: React.FC<Props> = ({ uploadFile }) => {
               >
                 {filesLoaded === 0 ? (
                   <>
-                    <input {...getInputProps()} />
+                    <input {...getInputProps()} accept=".json" type="file" />
                     <Animation>
                       <Language size="large" color="brand" />
                     </Animation>
@@ -108,8 +80,8 @@ const DragAndDrop: React.FC<Props> = ({ uploadFile }) => {
         </Box>
       )}
     </>
-  );
-};
+  )
+}
 const fadeIn = keyframes`
   0% {
     opacity: 0;
@@ -120,10 +92,10 @@ const fadeIn = keyframes`
   100% {
     opacity: 0;
   }
-`;
+`
 
 const Animation = styled.div`
   animation: 3s ${fadeIn} ease-in-out infinite;
-`;
+`
 
-export default DragAndDrop;
+export default DragAndDrop

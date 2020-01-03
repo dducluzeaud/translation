@@ -1,19 +1,14 @@
-import { ApolloProvider } from "@apollo/react-hooks";
-import ApolloClient from "apollo-boost";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import React from "react";
-import { Grommet, Box } from "grommet";
-import Appbar from "./components/Appbar/Appbar";
+import { ApolloProvider } from '@apollo/react-hooks'
+import { Box, Grommet } from 'grommet'
+import React from 'react'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import Appbar from './components/Appbar/Appbar'
+import AddTranslation from './pages/AddTranslation'
+import TranslationList from './pages/TranslationList'
+import { theme } from './utils/ui/theme'
+import { client } from './ApolloClient'
 
-import { theme } from "./utils/ui/theme";
-import TranslationList from "./pages/TranslationList";
-import AddTranslation from "./pages/AddTranslation";
-
-const client = new ApolloClient({
-  uri: "http://localhost:5000"
-});
-
-const Home: React.FC = () => <p>HOME</p>;
+const Home: React.FC = () => <p>HOME</p>
 
 const App: React.FC = () => {
   return (
@@ -43,7 +38,7 @@ const App: React.FC = () => {
         </Box>
       </Grommet>
     </ApolloProvider>
-  );
-};
+  )
+}
 
-export default App;
+export default App

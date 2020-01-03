@@ -1,21 +1,21 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag'
 
 export interface TranslationVars {
-  project: string;
+  project: string
 }
 
 export interface Translation {
-  created_at: string;
-  traduction_key: string;
-  url: string | null;
+  created_at: string
+  traduction_key: string
+  url: string | null
   languages: {
-    en: string | null;
-    fr: string | null;
-  };
+    en: string | null
+    fr: string | null
+  }
 }
 
 export interface TranslationData {
-  translations: Translation[];
+  translations: Translation[]
 }
 
 export const GET_TRANSLATIONS = gql`
@@ -30,4 +30,12 @@ export const GET_TRANSLATIONS = gql`
       }
     }
   }
-`;
+`
+
+export const uploadFileMutation = gql`
+  mutation UploadFile($file: Upload!) {
+    uploadFile(file: $file) {
+      filename
+    }
+  }
+`

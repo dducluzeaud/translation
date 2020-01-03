@@ -8,6 +8,9 @@ import jwt from 'jsonwebtoken'
 dotenv.config()
 
 const server = new ApolloServer({
+  cors: {
+    allowedHeaders: '*',
+  },
   typeDefs: graphQlSchema,
   resolvers: graphQlResolvers,
   introspection: true,
