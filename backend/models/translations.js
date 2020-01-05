@@ -1,16 +1,13 @@
-import mongoose from 'mongoose'
+import { Schema, model } from 'mongoose'
 
-const translationSchema = new mongoose.Schema({
-  traduction_key: {
+const translationSchema = new Schema({
+  key: {
     type: String,
     required: true,
   },
   created_at: {
     type: Date,
     default: new Date(),
-  },
-  url: {
-    type: String,
   },
   languages: {
     en: {
@@ -24,10 +21,6 @@ const translationSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  project: {
-    type: mongoose.Schema.Types.ObjectID,
-    ref: 'Project',
-  },
 })
 
-export default mongoose.model('Translation', translationSchema)
+export default model('Translation', translationSchema)
