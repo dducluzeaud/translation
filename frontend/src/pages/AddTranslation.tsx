@@ -14,7 +14,7 @@ export const filesQuery = gql`
 
 const AddTranslation: React.FC = () => {
   const [uploadFile] = useMutation(uploadFileMutation, {
-    variables: [{ query: filesQuery }],
+    variables: { query: filesQuery },
   })
 
   return (

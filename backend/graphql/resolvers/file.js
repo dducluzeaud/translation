@@ -2,11 +2,38 @@ import Translation from '../../models/translations'
 import Project from '../../models/project'
 import { createWriteStream, existsSync, mkdirSync } from 'fs'
 import path from 'path'
+import fs from 'fs'
 
 existsSync(path.join(__dirname, '../../uploads')) ||
   mkdirSync(path.join(__dirname, '../../uploads'))
 
-const files = []
+const createTranslation = (key, value, language) => {
+  if (language === 'en') {
+    return Translation.findOneAndUpdate(
+      { key },
+      {
+        key,
+        'languages.en': value,
+        updated: true,
+      },
+      {
+        upsert: true,
+      }
+    )
+  }
+  return Translation.findOneAndUpdate(
+    { key },
+    {
+      key,
+      'languages.fr': value,
+      updated: true,
+    },
+    {
+      upsert: true,
+    }
+  )
+}
+
 const resolvers = {
   Query: {
     getTranslation: async (_, { project }) => {
@@ -26,6 +53,20 @@ const resolvers = {
           .on('close', res)
       )
 
+      const dataFile = fs.readFileSync(
+        path.join(__dirname, `../../uploads`, filename),
+        'utf8'
+      )
+
+      const data = JSON.parse(dataFile)
+
+      const language = filename.split('.')[0]
+
+      for (const [key, value] of Object.entries(data)) {
+        await createTranslation(key, value, language)
+        console.log(key, value, 'AFRER CREATE TRANSLATION')
+      }
+
       return { filename, mimetype, encoding }
     },
     uploadTranslations: async (_, args) => {
@@ -40,11 +81,11 @@ const resolvers = {
         })
 
       const createTranslation = translation =>
-        Translation.findOneAndUpdate(
-          { traduction_key: translation.traduction_key },
-          translation,
-          { upsert: true, setDefaultsOnInsert: true, useFindAndModify: false }
-        )
+        Translation.findOneAndUpdate({ key: translation.key }, translation, {
+          upsert: true,
+          setDefaultsOnInsert: true,
+          useFindAndModify: false,
+        })
 
       const addTranslationToProject = (projectId, translationId) =>
         Translation.findByIdAndUpdate(
@@ -73,7 +114,7 @@ const resolvers = {
           }
         })
       } catch (error) {
-        return { message: error }
+        console.error(error)
       }
       return { message: 'Traductions chargé avec succès' }
     },
