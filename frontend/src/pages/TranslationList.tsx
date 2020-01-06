@@ -21,7 +21,7 @@ const TranslationList: React.FC = () => {
   return (
     <Box>
       {data?.translations.map(translation => (
-        <TranslationContainer translation={translation} />
+        <TranslationContainer key={translation.key} translation={translation} />
       ))}
     </Box>
   )
