@@ -14,28 +14,14 @@ const App: React.FC = () => {
   return (
     <ApolloProvider client={client}>
       <Grommet theme={theme} full>
-        <Box fill>
-          <Appbar />
-          <Box justify="center" align="center" fill>
-            <Box width="xlarge">
-              <Router>
-                <Switch>
-                  <Route path="/" exact component={Home} />
-                  <Route
-                    exact
-                    path="/translation/add"
-                    component={AddTranslation}
-                  />
-                  <Route
-                    exact
-                    path="/translation/:project"
-                    component={TranslationList}
-                  />
-                </Switch>
-              </Router>
-            </Box>
-          </Box>
-        </Box>
+        <Appbar />
+        <Router>
+          <Switch>
+            <Route path="/" exact component={Home} />
+            <Route exact path="/translation/add" component={AddTranslation} />
+            <Route exact path="/translations" component={TranslationList} />
+          </Switch>
+        </Router>
       </Grommet>
     </ApolloProvider>
   )
