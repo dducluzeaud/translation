@@ -42,23 +42,32 @@ const typedefs = gql`
   }
 
   type Translation {
-    traduction_key: String!
+    key: String!
     created_at: String!
-    url: String
     languages: Language
     updated: Boolean
-    project: String
   }
 
   type Query {
     login(email: String!, password: String!): AuthData!
-    getTranslation(project: String!): [Translation]!
+    getTranslation: [Translation]!
+  }
+
+  input UpdateInput {
+    key: String!
+    languages: LanguagesInput!
+  }
+
+  input LanguagesInput {
+    en: String
+    fr: String
   }
 
   type Mutation {
     createUser(userInput: UserInput): User
     uploadTranslations(value: Upload!): Message
     uploadFile(file: Upload!): File!
+    updateTranslation(updateInput: UpdateInput!): Translation
   }
 `
 

@@ -34,12 +34,16 @@ const createTranslation = (key, value, language) => {
   )
 }
 
+const setQuery = (en, fr) => {
+  if (en && fr) return { 'languages.en': en, 'languages.fr': fr }
+  if (en && !fr) return { 'languages.en': en }
+  if (!en && fr) return { 'languages.fr': fr }
+  return {}
+}
+
 const resolvers = {
   Query: {
-    getTranslation: async (_, { project }) => {
-      const projectId = await Project.find({ name: project })
-      return Translation.find({ project: projectId })
-    },
+    getTranslation: async () => await Translation.find({}),
   },
   Mutation: {
     uploadFile: async (_, { file }) => {
@@ -64,59 +68,28 @@ const resolvers = {
 
       for (const [key, value] of Object.entries(data)) {
         await createTranslation(key, value, language)
-        console.log(key, value, 'AFRER CREATE TRANSLATION')
       }
 
       return { filename, mimetype, encoding }
     },
-    uploadTranslations: async (_, args) => {
-      const translations = await args.value
-
-      // https://bezkoder.com/mongoose-one-to-many-relationship/
-      const createProject = project =>
-        Project.findOneAndUpdate({ name: project.name }, project, {
-          upsert: true,
-          setDefaultsOnInsert: true,
-          useFindAndModify: false,
-        })
-
-      const createTranslation = translation =>
-        Translation.findOneAndUpdate({ key: translation.key }, translation, {
-          upsert: true,
-          setDefaultsOnInsert: true,
-          useFindAndModify: false,
-        })
-
-      const addTranslationToProject = (projectId, translationId) =>
-        Translation.findByIdAndUpdate(
-          translationId,
-          { project: projectId },
-          { new: true, useFindAndModify: false }
-        )
-
+    updateTranslation: async (_, { updateInput }) => {
       try {
-        const project = await createProject({ name: 'Web' })
+        const { key, languages } = updateInput
 
-        Object.entries(translations).forEach(async ([key, value]) => {
-          try {
-            const translation = await createTranslation({
-              traduction_key: key,
-              languages: {
-                fr: value,
-              },
-            })
-            project = await addTranslationToProject(
-              project._id,
-              translation._id
-            )
-          } catch (error) {
-            return { message: error }
-          }
+        const existingKey = await Translation.findOne({ key })
+        if (!existingKey) {
+          throw new Error('Invalid key')
+        }
+
+        const query = setQuery(languages.en, languages.fr)
+
+        return Translation.findOneAndUpdate({ key: updateInput.key }, query, {
+          useFindAndModify: false,
+          new: true,
         })
       } catch (error) {
-        console.error(error)
+        throw new Error(error)
       }
-      return { message: 'Traductions chargé avec succès' }
     },
   },
 }

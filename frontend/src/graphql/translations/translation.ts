@@ -6,8 +6,7 @@ export interface TranslationVars {
 
 export interface Translation {
   created_at: string
-  traduction_key: string
-  url: string | null
+  key: string
   languages: {
     en: string | null
     fr: string | null
@@ -19,11 +18,10 @@ export interface TranslationData {
 }
 
 export const GET_TRANSLATIONS = gql`
-  query translation($project: String!) {
-    translations: getTranslation(project: $project) {
+  query translation {
+    translations: getTranslation {
       created_at
-      traduction_key
-      url
+      key
       languages {
         en
         fr
@@ -36,6 +34,19 @@ export const uploadFileMutation = gql`
   mutation UploadFile($file: Upload!) {
     uploadFile(file: $file) {
       filename
+    }
+  }
+`
+
+export const UPDATE_TRANSLATION = gql`
+  mutation updateTranslation($key: String!, $languages: LanguagesInput!) {
+    updateTranslation(updateInput: { key: $key, languages: $languages }) {
+      key
+      languages {
+        en
+        fr
+      }
+      updated
     }
   }
 `
