@@ -6,8 +6,7 @@ import TranslationContainer from './TranslationContainer'
 
 const translation = {
   created_at: '1577876004241',
-  traduction_key: 'common.button.validate',
-  url: null,
+  key: 'common.button.validate',
   languages: {
     en: null,
     fr: 'Valider',
