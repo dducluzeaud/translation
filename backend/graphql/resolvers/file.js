@@ -1,5 +1,4 @@
 import Translation from '../../models/translations'
-import Project from '../../models/project'
 import { createWriteStream, existsSync, mkdirSync } from 'fs'
 import path from 'path'
 import fs from 'fs'
@@ -42,9 +41,6 @@ const setQuery = (en, fr) => {
 }
 
 const resolvers = {
-  Query: {
-    getTranslation: async () => await Translation.find({}),
-  },
   Mutation: {
     uploadFile: async (_, { file }) => {
       const { createReadStream, filename, mimetype, encoding } = await file
