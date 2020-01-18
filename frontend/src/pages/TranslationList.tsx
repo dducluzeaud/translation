@@ -1,28 +1,67 @@
-import { useQuery } from '@apollo/react-hooks'
-import { isEmpty } from 'ramda'
-import React from 'react'
+import { useQuery, useLazyQuery } from '@apollo/react-hooks'
+import { isEmpty, isNil } from 'ramda'
+import React, { useState, ChangeEvent } from 'react'
 import TranslationContainer from '../components/TranslationContainer/TranslationContainer'
 import {
   GET_TRANSLATIONS,
   TranslationData,
   TranslationVars,
+  SEARCH_TRANSLATION,
 } from '../graphql/translations/translation'
-import { TextInput, Box } from 'grommet'
+import { Box, InfiniteScroll, TextInput, Button } from 'grommet'
+import { useEffect } from '@storybook/addons'
 
 const TranslationList: React.FC = () => {
-  const { data, loading, error } = useQuery<TranslationData, TranslationVars>(
-    GET_TRANSLATIONS
-  )
+  const [search, setSearch] = useState('')
 
-  if (loading) return <p>Loading ...</p>
-  if (error) return <p>error ...</p>
-  if (isEmpty(data?.translations)) return <p>Empty ...</p>
+  const {
+    data: translationList,
+    loading: loadingList,
+    error: errorList,
+  } = useQuery<TranslationData, TranslationVars>(GET_TRANSLATIONS, {
+    skip: search !== '',
+  })
+
+  const [
+    searchTranslation,
+    { data: translationSearch, loading: loadingSearch, error: errorSearch },
+  ] = useLazyQuery(SEARCH_TRANSLATION, { fetchPolicy: 'no-cache' })
+
+  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault()
+    const {
+      target: { value: searched },
+    } = event
+    setSearch(searched)
+  }
+
+  if (loadingSearch || loadingList) return <p>Loading ...</p>
+  if (errorSearch || errorList) return <p>error ...</p>
+  if (isEmpty(translationList) || isEmpty(translationSearch))
+    return <p>Empty ...</p>
 
   return (
     <Box>
-      {data?.translations.map(translation => (
-        <TranslationContainer key={translation.key} translation={translation} />
-      ))}
+      <Box pad="small" justify="end" width="100%">
+        <form onSubmit={() => searchTranslation({ variables: { search } })}>
+          <TextInput
+            placeholder="type here"
+            value={search}
+            onChange={handleSearch}
+          />
+        </form>
+
+        <Box />
+        <InfiniteScroll
+          items={
+            search !== ''
+              ? translationSearch?.searchTranslation
+              : translationList?.translations
+          }
+        >
+          {item => <TranslationContainer key={item.key} translation={item} />}
+        </InfiniteScroll>
+      </Box>
     </Box>
   )
 }

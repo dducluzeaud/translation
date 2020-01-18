@@ -6,6 +6,7 @@ const Appbar: React.FC = () => (
     <Box direction="row" gap="medium">
       <Anchor label="Add" href="/translation/add" />
       <Anchor label="List" href="/translations" />
+      <Anchor label="Export" href="/translations/export" />
     </Box>
   </Header>
 )

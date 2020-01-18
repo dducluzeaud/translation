@@ -19,7 +19,7 @@ export interface TranslationData {
 
 export const GET_TRANSLATIONS = gql`
   query translation {
-    translations: getTranslation {
+    translations: getTranslations {
       created_at
       key
       languages {
@@ -47,6 +47,18 @@ export const UPDATE_TRANSLATION = gql`
         fr
       }
       updated
+    }
+  }
+`
+
+export const SEARCH_TRANSLATION = gql`
+  query getTranslationEN($search: String!) {
+    searchTranslation(search: $search) {
+      key
+      languages {
+        en
+        fr
+      }
     }
   }
 `

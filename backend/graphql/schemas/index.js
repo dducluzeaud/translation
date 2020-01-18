@@ -1,6 +1,11 @@
 import { gql } from 'apollo-server'
+import Translation from './translation'
 
 const typedefs = gql`
+  input SearchInput {
+    search: String!
+  }
+
   type Message {
     message: String
   }
@@ -50,7 +55,6 @@ const typedefs = gql`
 
   type Query {
     login(email: String!, password: String!): AuthData!
-    getTranslation: [Translation]!
   }
 
   input UpdateInput {
@@ -71,4 +75,4 @@ const typedefs = gql`
   }
 `
 
-export default typedefs
+export default [typedefs, Translation]

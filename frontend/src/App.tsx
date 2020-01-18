@@ -1,5 +1,5 @@
 import { ApolloProvider } from '@apollo/react-hooks'
-import { Box, Grommet } from 'grommet'
+import { Grommet } from 'grommet'
 import React from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Appbar from './components/Appbar/Appbar'
@@ -7,8 +7,7 @@ import AddTranslation from './pages/AddTranslation'
 import TranslationList from './pages/TranslationList'
 import { theme } from './utils/ui/theme'
 import { client } from './ApolloClient'
-
-const Home: React.FC = () => <p>HOME</p>
+import ExportTranslation from './pages/ExportTranslation'
 
 const App: React.FC = () => {
   return (
@@ -17,9 +16,14 @@ const App: React.FC = () => {
         <Appbar />
         <Router>
           <Switch>
-            <Route path="/" exact component={Home} />
+            <Route path="/" exact component={TranslationList} />
             <Route exact path="/translation/add" component={AddTranslation} />
             <Route exact path="/translations" component={TranslationList} />
+            <Route
+              exact
+              path="/translations/export"
+              component={ExportTranslation}
+            />
           </Switch>
         </Router>
       </Grommet>
