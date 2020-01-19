@@ -30,6 +30,18 @@ export const GET_TRANSLATIONS = gql`
   }
 `
 
+export const EXPORT_TRANSLATIONS = gql`
+  query translation {
+    translations: getTranslations {
+      key
+      languages {
+        en
+        fr
+      }
+    }
+  }
+`
+
 export const uploadFileMutation = gql`
   mutation UploadFile($file: Upload!) {
     uploadFile(file: $file) {
